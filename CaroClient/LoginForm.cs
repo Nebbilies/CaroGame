@@ -31,6 +31,9 @@ namespace CaroClient
         {
             SocketManager.Instance.Connect("127.0.0.1", 9999);
             SocketManager.Instance.Send("NAME|" + txtBoxName.Text);
+            LobbyForm lobbyForm = new LobbyForm();
+            lobbyForm.Show();
+            this.Hide();
         }
     }
 }
