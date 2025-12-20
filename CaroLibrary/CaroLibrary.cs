@@ -32,6 +32,7 @@ namespace CaroLibrary
         public class RoomSummary
         {
             public string RoomId { get; set; }
+            public string RoomName { get; set; }
             public int CurrentPlayerCount { get; set; }
             public bool IsFull => CurrentPlayerCount >= 2;
             public bool IsGameStarted { get; set; }
@@ -40,6 +41,7 @@ namespace CaroLibrary
         public class RoomInfo
         {
             public string RoomId { get; set; }
+            public string RoomName { get; set; }
             public string PlayerXName { get; set; }
             public string PlayerOName { get; set; }
             public int CurrentTurn { get; set; }
