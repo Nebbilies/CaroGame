@@ -29,8 +29,8 @@ namespace CaroClient
 
         private void btnConnect_Click(object sender, EventArgs e)
         {
-            SocketManager.Instance.Connect("127.0.0.1", 9999);
-            SocketManager.Instance.Send("NAME|" + txtBoxName.Text);
+            SocketManager.Instance.Connect("127.0.0.1", 8888);
+            SocketManager.Instance.Send("LOGIN|" + txtBoxName.Text);
             LobbyForm lobbyForm = new LobbyForm();
             lobbyForm.Show();
             this.Hide();

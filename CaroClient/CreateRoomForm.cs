@@ -23,9 +23,8 @@ namespace CaroClient
         { 
             roomName = txtRoomName.Text.Trim();
             timePerMove = (int)nudRoomTimer.Value;
-            string createRoomMsg = $"CREATE_ROOM|{SocketManager.Instance.PlayerName}|{roomName}|{timePerMove}";
+            string createRoomMsg = $"CREATE_ROOM|{roomName}|{timePerMove}";
             SocketManager.Instance.Send(createRoomMsg);
-            MessageBox.Show("Room created successfully!");
             this.Close();
         }
 
