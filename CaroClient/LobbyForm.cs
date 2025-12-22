@@ -4,7 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,32 +25,49 @@ namespace CaroClient
 
         private void ListenForServerMsg()
         {
-            while (SocketManager.Instance.Client.Connected)
+            using (var reader = new StreamReader(SocketManager.Instance.Stream, Encoding.UTF8, true, 1024, true))
             {
-                try
+                while (SocketManager.Instance.Client.Connected)
                 {
-                    byte[] buffer = new byte[1024];
-                    int bytesRead = SocketManager.Instance.Stream.Read(buffer, 0, buffer.Length);
-                    string msg = Encoding.UTF8.GetString(buffer, 0, bytesRead).Trim();
-                    if (msg.StartsWith("LOBBY_UPDATE|"))
+                    try
                     {
-                        string roomList = msg.Substring("LOBBY_UPDATE|".Length);
-                        this.Invoke(new UpdateLobbyDelegate(UpdateLobby), roomList);
+                        string msg = reader.ReadLine();
+                        if (msg.StartsWith("LOBBY_DATA|"))
+                        {
+                            string roomList = msg.Substring("LOBBY_DATA|".Length);
+                            this.Invoke(new UpdateLobbyDelegate(UpdateLobby), roomList);
+                        }
+                        else if (msg.StartsWith("ROOM_CREATED|"))
+                        {
+                            string roomId = msg.Substring("ROOM_CREATED|".Length);
+                            MessageBox.Show("Phòng được tạo thành công với ID: " + roomId);
+                        }
+                        else if (msg.StartsWith("ERROR|"))
+                        {
+                            string errorMsg = msg.Substring("ERROR|".Length);
+                            MessageBox.Show("Error: " + errorMsg);
+                        }
+                        else if (msg.StartsWith("GAME_START|"))
+                        {
+                            string[] parts = msg.Split('|');
+                            string playerOName = parts[1];
+                            string playerXName = parts[2];
+                            int playerSymbol = int.Parse(parts[3]);
+                            // GameForm gameForm = new GameForm(playerOName, playerXName, playerSymbol, timePerMove);
+                            // gameForm.Show();
+                            this.Hide();
+                        }
                     }
-                    /*else if ()
+                    catch (Exception ex)
                     {
-
-                    }*/
+                        MessageBox.Show("Connection lost: " + ex.Message);
+                        LoginForm loginForm = new LoginForm();
+                        loginForm.Show();
+                        this.Close();
+                        break;
+                    }
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Connection lost: " + ex.Message);
-                    LoginForm loginForm = new LoginForm();
-                    loginForm.Show();
-                    this.Close();
-                    break;
-                }
-            }
+            }    
         }
 
         private void UpdateLobby(string roomList)
@@ -98,6 +117,17 @@ namespace CaroClient
             string roomName = selectedItem.Text;
             string joinRoomMsg = $"JOIN_ROOM|{SocketManager.Instance.PlayerName}|{roomId}";
             SocketManager.Instance.Send(joinRoomMsg);
+        }
+
+        private void LobbyForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (SocketManager.Instance.Client.Connected)
+            {
+                SocketManager.Instance.Send("LOGOUT|");
+                SocketManager.Instance.Client.Close();
+            }
+
+            Application.Exit();
         }
     }
 }

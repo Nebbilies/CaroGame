@@ -30,11 +30,11 @@
         {
             this.label1 = new System.Windows.Forms.Label();
             this.lvRooms = new System.Windows.Forms.ListView();
-            this.btnCreateRoom = new System.Windows.Forms.Button();
-            this.btnJoinRoom = new System.Windows.Forms.Button();
+            this.roomId = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.roomName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.roomInfo = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.roomId = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.btnCreateRoom = new System.Windows.Forms.Button();
+            this.btnJoinRoom = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -65,6 +65,21 @@
             this.lvRooms.UseCompatibleStateImageBehavior = false;
             this.lvRooms.View = System.Windows.Forms.View.Details;
             // 
+            // roomId
+            // 
+            this.roomId.Text = "#";
+            // 
+            // roomName
+            // 
+            this.roomName.Text = "Tên phòng";
+            this.roomName.Width = 466;
+            // 
+            // roomInfo
+            // 
+            this.roomInfo.Text = "Số người";
+            this.roomInfo.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.roomInfo.Width = 200;
+            // 
             // btnCreateRoom
             // 
             this.btnCreateRoom.AutoSize = true;
@@ -88,21 +103,6 @@
             this.btnJoinRoom.UseVisualStyleBackColor = true;
             this.btnJoinRoom.Click += new System.EventHandler(this.btnJoinRoom_Click);
             // 
-            // roomName
-            // 
-            this.roomName.Text = "Tên phòng";
-            this.roomName.Width = 466;
-            // 
-            // roomInfo
-            // 
-            this.roomInfo.Text = "Số người";
-            this.roomInfo.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.roomInfo.Width = 200;
-            // 
-            // roomId
-            // 
-            this.roomId.Text = "#";
-            // 
             // LobbyForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 23F);
@@ -119,6 +119,7 @@
             this.Name = "LobbyForm";
             this.Padding = new System.Windows.Forms.Padding(30);
             this.Text = "LobbyForm";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.LobbyForm_FormClosed);
             this.ResumeLayout(false);
             this.PerformLayout();
 
