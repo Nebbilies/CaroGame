@@ -1,5 +1,6 @@
 ﻿using CaroLibrary.CaroLibrary;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -10,7 +11,7 @@ namespace CaroServer
         private List<RoomInfo> _rooms = new List<RoomInfo>();
         private object _lock = new object();
 
-        public void CreateRoom(ClientSession session, string roomId)
+        public void CreateRoom(ClientSession session, string roomId, string roomName, int timePerMove)
         {
             lock (_lock)
             {
@@ -23,6 +24,8 @@ namespace CaroServer
                 RoomInfo newRoom = new RoomInfo
                 {
                     RoomId = roomId,
+                    RoomName = roomName,
+                    TimePerMove = timePerMove,
                     PlayerOName = session.PlayerData.Name,
                     CurrentPlayerCount = 1,
                     IsGameStarted = false,
@@ -32,6 +35,7 @@ namespace CaroServer
                 session.PlayerData.CurrentRoomId = roomId;
                 _rooms.Add(newRoom);
                 session.Send($"ROOM_CREATED|{roomId}");
+                Console.WriteLine($"Room {roomName} created with ID {roomId} by {session.PlayerData.Name}");
             }
         }
 
@@ -108,6 +112,7 @@ namespace CaroServer
                 var summaries = _rooms.Select(r => new RoomSummary
                 {
                     RoomId = r.RoomId,
+                    RoomName = r.RoomName,
                     CurrentPlayerCount = r.CurrentPlayerCount,
                     IsGameStarted = r.IsGameStarted
                 }).ToList();

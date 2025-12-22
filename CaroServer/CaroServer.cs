@@ -66,6 +66,7 @@ namespace CaroServer
                         session.PlayerData.Name = parts[1];
                         session.Send("LOGIN_SUCCESS");
                         BroadcastLobby();
+                        Console.WriteLine($"{session.PlayerData.Name} logged in");
                     }
                     break;
 
@@ -76,7 +77,10 @@ namespace CaroServer
                 case "CREATE_ROOM":
                     if (parts.Length > 1)
                     {
-                        _roomManager.CreateRoom(session, parts[1]);
+                        string roomName = parts[1];
+                        int timePerMove = parts.Length > 2 ? int.Parse(parts[2]) : 30;
+                        string roomId = Guid.NewGuid().ToString().Substring(0, 8);
+                        _roomManager.CreateRoom(session, roomId, roomName, timePerMove);
                         BroadcastLobby();
                     }
                     break;
@@ -133,9 +137,10 @@ namespace CaroServer
             {
                 foreach (var s in _sessions)
                 {
-                    if (string.IsNullOrEmpty(s.PlayerData.CurrentRoomId))
+                    if (true)
                     {
-                        s.Send($"LOBBY_DATA|{json}");
+                        Console.WriteLine($"Broadcasting lobby data to {s.PlayerData.Name}, data: {json}");
+                        s.Send($"LOBBY_DATA|{json}\n");
                     }
                 }
             }
