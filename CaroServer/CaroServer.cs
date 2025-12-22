@@ -137,7 +137,7 @@ namespace CaroServer
             {
                 foreach (var s in _sessions)
                 {
-                    if (true)
+                    if (string.IsNullOrEmpty(s.PlayerData.CurrentRoomId))
                     {
                         Console.WriteLine($"Broadcasting lobby data to {s.PlayerData.Name}, data: {json}");
                         s.Send($"LOBBY_DATA|{json}\n");

@@ -50,12 +50,19 @@ namespace CaroClient
                         else if (msg.StartsWith("GAME_START|"))
                         {
                             string[] parts = msg.Split('|');
-                            string playerOName = parts[1];
-                            string playerXName = parts[2];
-                            int playerSymbol = int.Parse(parts[3]);
-                            // GameForm gameForm = new GameForm(playerOName, playerXName, playerSymbol, timePerMove);
-                            // gameForm.Show();
-                            this.Hide();
+                            if (parts.Length >= 5)
+                            {
+                                string playerOName = parts[1];
+                                string playerXName = parts[2];
+                                int.TryParse(parts[3], out int timePerMove);
+                                int.TryParse(parts[4], out int playerSymbol);
+                                this.Invoke(new Action(() => {
+                                    // GameForm gameForm = new GameForm(playerOName, playerXName, playerSymbol, timePerMove);
+                                    // gameForm.Show();
+                                    this.Hide();
+                                    MessageBox.Show($"Trận đấu bắt đầu! Bạn là quân {(playerSymbol == 1 ? "O" : "X")}");
+                                }));
+                            }
                         }
                     }
                     catch (Exception ex)
@@ -114,8 +121,8 @@ namespace CaroClient
                 MessageBox.Show("Phòng đã đầy.");
                 return;
             }
-            string roomName = selectedItem.Text;
-            string joinRoomMsg = $"JOIN_ROOM|{SocketManager.Instance.PlayerName}|{roomId}";
+            string roomId = selectedItem.SubItems[0].Text;
+            string joinRoomMsg = $"JOIN_ROOM|{roomId}";
             SocketManager.Instance.Send(joinRoomMsg);
         }
 

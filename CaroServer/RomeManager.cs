@@ -54,11 +54,13 @@ namespace CaroServer
                 room.CurrentPlayerCount = 2;
                 room.IsGameStarted = true;
                 session.PlayerData.CurrentRoomId = roomId;
+                int timePerMove = room.TimePerMove;
 
-                string startMsg = $"GAME_START|{room.PlayerOName}|{room.PlayerXName}";
+                string startMsg = $"GAME_START|{room.PlayerOName}|{room.PlayerXName}|{timePerMove}";
 
-                hostSession.Send(startMsg + "|1");
-                session.Send(startMsg + "|2");
+                Console.WriteLine($"Room {room.RoomName}: {startMsg}");
+                hostSession.Send(startMsg + "|1\n");
+                session.Send(startMsg + "|2\n");
             }
         }
 
