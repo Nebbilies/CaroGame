@@ -44,6 +44,7 @@
             // 
             // label1
             // 
+            this.label1.BackColor = System.Drawing.Color.Transparent;
             this.label1.Dock = System.Windows.Forms.DockStyle.Top;
             this.label1.Font = new System.Drawing.Font("Segoe UI", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -174,6 +175,7 @@
             this.Padding = new System.Windows.Forms.Padding(30);
             this.Text = "LobbyForm";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.LobbyForm_FormClosed);
+            this.Paint += new System.Windows.Forms.PaintEventHandler(this.LobbyForm_Paint);
             this.flpRoomInformation.ResumeLayout(false);
             this.flpRoomInformation.PerformLayout();
             this.ResumeLayout(false);

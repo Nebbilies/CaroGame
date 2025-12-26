@@ -326,5 +326,20 @@ namespace CaroClient
 
             Application.Exit();
         }
+
+        private void GameForm_Paint(object sender, PaintEventArgs e)
+        {
+            Color colorStart = Color.FromArgb(255, 235, 235);
+            Color colorEnd = Color.FromArgb(235, 250, 255);
+
+            using (LinearGradientBrush brush = new LinearGradientBrush(
+                this.ClientRectangle,
+                colorStart,
+                colorEnd,
+                LinearGradientMode.ForwardDiagonal))
+            {
+                e.Graphics.FillRectangle(brush, this.ClientRectangle);
+            }
+        }
     }
 }

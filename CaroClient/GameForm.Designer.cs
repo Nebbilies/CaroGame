@@ -155,6 +155,7 @@
             this.Name = "GameForm";
             this.Text = "Caro Online";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.GameForm_FormClosed);
+            this.Paint += new System.Windows.Forms.PaintEventHandler(this.GameForm_Paint);
             this.mainLayout.ResumeLayout(false);
             this.mainLayout.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbxGameGrid)).EndInit();
