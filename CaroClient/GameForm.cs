@@ -24,25 +24,18 @@ namespace CaroClient
         // UI & Timer
         private int _timePerMove;
         private int _timeLeftSeconds;
-        private Timer turnTimer;
-
         // Graphics constants
         private const int CellSize = 20;
         private const int GridMargin = 20;
         private int GridPixelSize => CaroConfig.BOARD_SIZE * CellSize;
-
-        // Controls
-        private PictureBox pbxGameGrid;
-        private Panel panelRightInfo;
-        private Label lblPlayer1, lblPlayer2, lblTimer, lblScore;
-        private TableLayoutPanel mainLayout;
+        
 
         // In GameForm.cs
 
         public GameForm(string roomId, string playerOName, string playerXName, int mySymbol, int timePerMove)
         {
-            InitializeCustomComponents();
-
+            InitializeComponent();
+            
             _roomId = roomId;
             _mySymbol = mySymbol;
             _timePerMove = timePerMove;
@@ -321,51 +314,6 @@ namespace CaroClient
                     }
                 }
             }
-        }
-
-        private void InitializeCustomComponents()
-        {
-            this.Text = "Caro Online";
-            this.Size = new Size(900, 750);
-            this.BackColor = Color.White;
-
-            mainLayout = new TableLayoutPanel();
-            mainLayout.Dock = DockStyle.Fill;
-            mainLayout.ColumnCount = 2;
-            mainLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, GridPixelSize + (GridMargin * 2)));
-            mainLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            mainLayout.RowCount = 1;
-            mainLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-
-            // Grid
-            pbxGameGrid = new PictureBox { Dock = DockStyle.Fill, BackColor = Color.White };
-            pbxGameGrid.Paint += pbxGameGrid_Paint;
-            pbxGameGrid.MouseClick += pbxGameGrid_MouseClick;
-
-            // Info Panel
-            panelRightInfo = new Panel { Dock = DockStyle.Fill, Padding = new Padding(20) };
-
-            Font nameFont = new Font("Segoe UI", 14, FontStyle.Bold);
-            Font timerFont = new Font("Segoe UI", 26, FontStyle.Bold);
-            Font scoreFont = new Font("Segoe UI", 22, FontStyle.Bold); // Kept for layout, though score is not sent by server currently
-
-            lblPlayer2 = new Label { ForeColor = Color.Black, Font = nameFont, AutoSize = true, Dock = DockStyle.Bottom, TextAlign = ContentAlignment.BottomLeft, Padding = new Padding(0, 0, 0, 10) };
-            lblPlayer1 = new Label { ForeColor = Color.Black, Font = nameFont, AutoSize = true, Dock = DockStyle.Top, TextAlign = ContentAlignment.TopLeft };
-
-            lblTimer = new Label { Text = "00:00", Font = timerFont, ForeColor = Color.Black, AutoSize = true, Location = new Point(20, 100) };
-            lblScore = new Label { Text = "vs", Font = scoreFont, ForeColor = Color.Gray, AutoSize = true, Location = new Point(30, 200) };
-
-            panelRightInfo.Controls.Add(lblPlayer1);
-            panelRightInfo.Controls.Add(lblPlayer2);
-            panelRightInfo.Controls.Add(lblTimer);
-            panelRightInfo.Controls.Add(lblScore);
-
-            mainLayout.Controls.Add(pbxGameGrid, 0, 0);
-            mainLayout.Controls.Add(panelRightInfo, 1, 0);
-            this.Controls.Add(mainLayout);
-
-            turnTimer = new Timer { Interval = 1000 };
-            turnTimer.Tick += turnTimer_Tick;
         }
     }
 }
