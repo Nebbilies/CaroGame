@@ -28,31 +28,24 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.lblTitle = new System.Windows.Forms.Label();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LoginForm));
             this.txtBoxName = new System.Windows.Forms.TextBox();
             this.lblUsername = new System.Windows.Forms.Label();
             this.btnConnect = new System.Windows.Forms.Button();
+            this.flpControls = new System.Windows.Forms.FlowLayoutPanel();
+            this.pbLogo = new System.Windows.Forms.PictureBox();
+            this.flpControls.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbLogo)).BeginInit();
             this.SuspendLayout();
-            // 
-            // lblTitle
-            // 
-            this.lblTitle.Dock = System.Windows.Forms.DockStyle.Top;
-            this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTitle.Location = new System.Drawing.Point(20, 20);
-            this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(542, 38);
-            this.lblTitle.TabIndex = 0;
-            this.lblTitle.Text = "Login";
-            this.lblTitle.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.lblTitle.Click += new System.EventHandler(this.lblTitle_Click);
             // 
             // txtBoxName
             // 
+            this.txtBoxName.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.txtBoxName.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtBoxName.Location = new System.Drawing.Point(20, 84);
+            this.txtBoxName.Location = new System.Drawing.Point(3, 22);
             this.txtBoxName.MaxLength = 64;
             this.txtBoxName.Name = "txtBoxName";
-            this.txtBoxName.Size = new System.Drawing.Size(542, 30);
+            this.txtBoxName.Size = new System.Drawing.Size(542, 26);
             this.txtBoxName.TabIndex = 1;
             this.txtBoxName.TextChanged += new System.EventHandler(this.txtBoxName_TextChanged);
             // 
@@ -60,19 +53,19 @@
             // 
             this.lblUsername.AutoSize = true;
             this.lblUsername.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblUsername.Location = new System.Drawing.Point(16, 58);
+            this.lblUsername.Location = new System.Drawing.Point(3, 0);
             this.lblUsername.Name = "lblUsername";
-            this.lblUsername.Size = new System.Drawing.Size(56, 23);
+            this.lblUsername.Size = new System.Drawing.Size(45, 19);
             this.lblUsername.TabIndex = 2;
             this.lblUsername.Text = "Name";
             // 
             // btnConnect
             // 
-            this.btnConnect.AutoEllipsis = true;
             this.btnConnect.AutoSize = true;
-            this.btnConnect.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.btnConnect.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnConnect.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnConnect.Location = new System.Drawing.Point(20, 129);
+            this.btnConnect.Location = new System.Drawing.Point(3, 61);
+            this.btnConnect.Margin = new System.Windows.Forms.Padding(3, 10, 3, 3);
             this.btnConnect.Name = "btnConnect";
             this.btnConnect.Size = new System.Drawing.Size(542, 33);
             this.btnConnect.TabIndex = 3;
@@ -80,16 +73,39 @@
             this.btnConnect.UseVisualStyleBackColor = true;
             this.btnConnect.Click += new System.EventHandler(this.btnConnect_Click);
             // 
+            // flpControls
+            // 
+            this.flpControls.BackColor = System.Drawing.Color.Transparent;
+            this.flpControls.Controls.Add(this.lblUsername);
+            this.flpControls.Controls.Add(this.txtBoxName);
+            this.flpControls.Controls.Add(this.btnConnect);
+            this.flpControls.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.flpControls.Location = new System.Drawing.Point(14, 122);
+            this.flpControls.Name = "flpControls";
+            this.flpControls.Size = new System.Drawing.Size(548, 105);
+            this.flpControls.TabIndex = 4;
+            // 
+            // pbLogo
+            // 
+            this.pbLogo.BackColor = System.Drawing.Color.Transparent;
+            this.pbLogo.Image = ((System.Drawing.Image)(resources.GetObject("pbLogo.Image")));
+            this.pbLogo.Location = new System.Drawing.Point(154, 17);
+            this.pbLogo.Name = "pbLogo";
+            this.pbLogo.Size = new System.Drawing.Size(263, 99);
+            this.pbLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.pbLogo.TabIndex = 5;
+            this.pbLogo.TabStop = false;
+            this.pbLogo.WaitOnLoad = true;
+            // 
             // LoginForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(582, 182);
-            this.Controls.Add(this.btnConnect);
-            this.Controls.Add(this.lblUsername);
-            this.Controls.Add(this.txtBoxName);
-            this.Controls.Add(this.lblTitle);
+            this.BackColor = System.Drawing.SystemColors.Control;
+            this.ClientSize = new System.Drawing.Size(582, 242);
+            this.Controls.Add(this.pbLogo);
+            this.Controls.Add(this.flpControls);
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -97,16 +113,21 @@
             this.Name = "LoginForm";
             this.Padding = new System.Windows.Forms.Padding(20);
             this.Text = "Login";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.LoginForm_FormClosed);
+            this.Paint += new System.Windows.Forms.PaintEventHandler(this.LoginForm_Paint);
+            this.flpControls.ResumeLayout(false);
+            this.flpControls.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbLogo)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.Label lblTitle;
         private System.Windows.Forms.TextBox txtBoxName;
         private System.Windows.Forms.Label lblUsername;
         private System.Windows.Forms.Button btnConnect;
+        private System.Windows.Forms.FlowLayoutPanel flpControls;
+        private System.Windows.Forms.PictureBox pbLogo;
     }
 }
