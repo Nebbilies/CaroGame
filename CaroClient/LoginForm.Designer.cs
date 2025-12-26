@@ -46,8 +46,6 @@
             this.txtBoxName.MaxLength = 64;
             this.txtBoxName.Name = "txtBoxName";
             this.txtBoxName.Size = new System.Drawing.Size(542, 26);
-            this.txtBoxName.TabIndex = 1;
-            this.txtBoxName.TextChanged += new System.EventHandler(this.txtBoxName_TextChanged);
             // 
             // lblUsername
             // 
@@ -113,7 +111,6 @@
             this.Name = "LoginForm";
             this.Padding = new System.Windows.Forms.Padding(20);
             this.Text = "Login";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.LoginForm_FormClosed);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.LoginForm_Paint);
             this.flpControls.ResumeLayout(false);
             this.flpControls.PerformLayout();

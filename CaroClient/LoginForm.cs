@@ -16,14 +16,12 @@ namespace CaroClient
         public LoginForm()
         {
             InitializeComponent();
-            Task.Run(() => ListenForServerMsg());
         }
-
-        private bool _isListening = true;
 
         private void ListenForServerMsg()
         {
             var reader = SocketManager.Instance.Reader;
+            var _isListening = true;
 
             while (_isListening && SocketManager.Instance.Client.Connected)
             {
@@ -36,10 +34,12 @@ namespace CaroClient
                     {
                         this.Invoke(new Action(() =>
                         {
+                            _isListening = false;
                             LobbyForm lobbyForm = new LobbyForm();
                             lobbyForm.Show();
                             this.Hide();
                         }));
+                        break;
                     }
                     else if (msg.StartsWith("ERROR|"))
                     {
@@ -56,33 +56,23 @@ namespace CaroClient
                 }
             }
         }
-
-        private void txtBoxName_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void lblTitle_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void btnConnect_Click(object sender, EventArgs e)
         {
-            SocketManager.Instance.Connect("127.0.0.1", 8888);
-            SocketManager.Instance.Send("LOGIN|" + txtBoxName.Text);
+            try
+            {
+                SocketManager.Instance.Connect("127.0.0.1", 8888);
+                Task.Run(() => ListenForServerMsg());
+                SocketManager.Instance.Send("LOGIN|" + txtBoxName.Text);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Không thể kết nối tới máy chủ: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
-
-        private void LoginForm_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            _isListening = false;
-            Application.Exit();
-        }
-
         private void LoginForm_Paint(object sender, PaintEventArgs e)
         {
-            Color colorStart = Color.FromArgb(255, 235, 235); // Top-Left
-            Color colorEnd = Color.FromArgb(235, 250, 255);   // Bottom-Right
+            Color colorStart = Color.FromArgb(255, 235, 235);
+            Color colorEnd = Color.FromArgb(235, 250, 255);
 
             using (LinearGradientBrush brush = new LinearGradientBrush(
                 this.ClientRectangle,
@@ -90,7 +80,6 @@ namespace CaroClient
                 colorEnd,
                 LinearGradientMode.ForwardDiagonal))
             {
-                // Apply the gradient
                 e.Graphics.FillRectangle(brush, this.ClientRectangle);
             }
         }
