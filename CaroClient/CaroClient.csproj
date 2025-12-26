@@ -55,6 +55,8 @@
     <Compile Include="CreateRoomForm.Designer.cs">
       <DependentUpon>CreateRoomForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="GameForm.cs" />
+    <Compile Include="GameForm.Designer.cs" />
     <Compile Include="LobbyForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -106,6 +108,10 @@
     <ProjectReference Include="..\CaroLibrary\CaroLibrary.csproj">
       <Project>{145a5083-a066-4133-8a31-7054d9e6fefe}</Project>
       <Name>CaroLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CaroServer\CaroServer.csproj">
+      <Project>{9c0e65e3-1c40-454f-a6f5-151138647f53}</Project>
+      <Name>CaroServer</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
