@@ -1,4 +1,5 @@
-﻿using System.Net.Sockets;
+﻿using System.IO;
+using System.Net.Sockets;
 using System.Text;
 
 namespace CaroClient
@@ -9,6 +10,7 @@ namespace CaroClient
 
         public TcpClient Client { get; private set; }
         public NetworkStream Stream { get; private set; }
+        public StreamReader Reader { get; private set; } 
         public string PlayerName { get; set; }
 
         public bool Connect(string ip, int port)
@@ -18,6 +20,7 @@ namespace CaroClient
                 Client = new TcpClient();
                 Client.Connect(ip, port);
                 Stream = Client.GetStream();
+                Reader = new StreamReader(Stream, Encoding.UTF8, true, 1024, true);
                 return true;
             }
             catch

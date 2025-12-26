@@ -110,6 +110,32 @@ namespace CaroServer
                         _roomManager.HandleMove(session, roomId, x, y, opponent);
                     }
                     break;
+                
+                case "REMATCH_REQUEST":
+                {
+                    string roomId = session.PlayerData.CurrentRoomId;
+                    string opponentName = _roomManager.GetOpponentName(roomId, session.PlayerData.Name);
+                    ClientSession opponent = FindSessionByName(opponentName);
+        
+                    if (opponent != null)
+                    {
+                        opponent.Send("REMATCH_REQUEST|");
+                    }
+                }
+                    break;
+                
+                case "REMATCH_ACCEPT":
+                {
+                    string roomId = session.PlayerData.CurrentRoomId;
+                    
+                    _roomManager.ResetRoom(roomId);
+                    
+                    ClientSession opponent = FindSessionByName(_roomManager.GetOpponentName(roomId, session.PlayerData.Name));
+        
+                    session.Send("GAME_RESET|");
+                    if (opponent != null) opponent.Send("GAME_RESET|");
+                }
+                    break;
 
                 case "LEAVE_ROOM":
                     HandleDisconnect(session);
