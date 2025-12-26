@@ -22,59 +22,54 @@ namespace CaroClient
             InitializeComponent();
             Task.Run(() => ListenForServerMsg());
         }
+        
+        
+        
+        private bool _isListening = true;
 
         private void ListenForServerMsg()
         {
-            using (var reader = new StreamReader(SocketManager.Instance.Stream, Encoding.UTF8, true, 1024, true))
+            var reader = SocketManager.Instance.Reader;
+
+            while (_isListening && SocketManager.Instance.Client.Connected)
             {
-                while (SocketManager.Instance.Client.Connected)
+                try
                 {
-                    try
+                    string msg = reader.ReadLine();
+                    if (msg == null) break;
+
+                    if (msg.StartsWith("LOBBY_DATA|"))
                     {
-                        string msg = reader.ReadLine();
-                        if (msg.StartsWith("LOBBY_DATA|"))
-                        {
-                            string roomList = msg.Substring("LOBBY_DATA|".Length);
-                            this.Invoke(new UpdateLobbyDelegate(UpdateLobby), roomList);
-                        }
-                        else if (msg.StartsWith("ROOM_CREATED|"))
-                        {
-                            string roomId = msg.Substring("ROOM_CREATED|".Length);
-                            MessageBox.Show("Phòng được tạo thành công với ID: " + roomId);
-                        }
-                        else if (msg.StartsWith("ERROR|"))
-                        {
-                            string errorMsg = msg.Substring("ERROR|".Length);
-                            MessageBox.Show("Error: " + errorMsg);
-                        }
-                        else if (msg.StartsWith("GAME_START|"))
-                        {
-                            string[] parts = msg.Split('|');
-                            if (parts.Length >= 5)
-                            {
-                                string playerOName = parts[1];
-                                string playerXName = parts[2];
-                                int.TryParse(parts[3], out int timePerMove);
-                                int.TryParse(parts[4], out int playerSymbol);
-                                this.Invoke(new Action(() => {
-                                    // GameForm gameForm = new GameForm(playerOName, playerXName, playerSymbol, timePerMove);
-                                    // gameForm.Show();
-                                    this.Hide();
-                                    MessageBox.Show($"Trận đấu bắt đầu! Bạn là quân {(playerSymbol == 1 ? "O" : "X")}");
-                                }));
-                            }
-                        }
+                        string roomList = msg.Substring("LOBBY_DATA|".Length);
+                        this.Invoke(new UpdateLobbyDelegate(UpdateLobby), roomList);
                     }
-                    catch (Exception ex)
+                    else if (msg.StartsWith("GAME_START|"))
                     {
-                        MessageBox.Show("Connection lost: " + ex.Message);
-                        LoginForm loginForm = new LoginForm();
-                        loginForm.Show();
-                        this.Close();
-                        break;
+                        _isListening = false; 
+
+                        string[] parts = msg.Split('|');
+                        if (parts.Length >= 5)
+                        {
+                            string roomId = parts[1];
+                            string playerOName = parts[2];
+                            string playerXName = parts[3];
+                            int.TryParse(parts[4], out int timePerMove);
+                            int.TryParse(parts[5], out int playerSymbol);
+                    
+                            this.Invoke(new Action(() => {
+                                GameForm gameForm = new GameForm(roomId, playerOName, playerXName, playerSymbol, timePerMove);
+                                gameForm.Show();
+                                this.Hide(); 
+                                MessageBox.Show($"Trận đấu bắt đầu! Bạn là quân {(playerSymbol == 1 ? "O" : "X")}");
+                            }));
+                        }
                     }
                 }
-            }    
+                catch (Exception ex)
+                {
+                    break;
+                }
+            }
         }
 
         private void UpdateLobby(string roomList)
@@ -84,7 +79,6 @@ namespace CaroClient
             foreach (var room in rooms)
             {
                 ListViewItem item = new ListViewItem(room.RoomId);
-                item.SubItems.Add(room.RoomName);
                 item.SubItems.Add($"{room.CurrentPlayerCount}/2");
                 if (room.IsFull || room.IsGameStarted)
                 {

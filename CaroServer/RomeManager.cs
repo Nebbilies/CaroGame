@@ -24,7 +24,6 @@ namespace CaroServer
                 RoomInfo newRoom = new RoomInfo
                 {
                     RoomId = roomId,
-                    RoomName = roomName,
                     TimePerMove = timePerMove,
                     PlayerOName = session.PlayerData.Name,
                     CurrentPlayerCount = 1,
@@ -56,9 +55,8 @@ namespace CaroServer
                 session.PlayerData.CurrentRoomId = roomId;
                 int timePerMove = room.TimePerMove;
 
-                string startMsg = $"GAME_START|{room.PlayerOName}|{room.PlayerXName}|{timePerMove}";
-
-                Console.WriteLine($"Room {room.RoomName}: {startMsg}");
+                string startMsg = $"GAME_START|{roomId}|{room.PlayerOName}|{room.PlayerXName}|{timePerMove}";
+                
                 hostSession.Send(startMsg + "|1\n");
                 session.Send(startMsg + "|2\n");
             }
@@ -89,6 +87,8 @@ namespace CaroServer
                 string updateMsg = $"MOVE_UPDATE|{x}|{y}|{playerId}|{nextTurn}";
                 session.Send(updateMsg);
                 opponentSession?.Send(updateMsg);
+                
+                
 
                 if (isWin)
                 {
@@ -114,7 +114,6 @@ namespace CaroServer
                 var summaries = _rooms.Select(r => new RoomSummary
                 {
                     RoomId = r.RoomId,
-                    RoomName = r.RoomName,
                     CurrentPlayerCount = r.CurrentPlayerCount,
                     IsGameStarted = r.IsGameStarted
                 }).ToList();
@@ -149,5 +148,22 @@ namespace CaroServer
                 return (room.PlayerOName == myName) ? room.PlayerXName : room.PlayerOName;
             }
         }
+        public void ResetRoom(string roomId)
+        {
+            lock (_lock)
+            {
+                RoomInfo room = _rooms.FirstOrDefault(r => r.RoomId == roomId);
+                if (room != null)
+                {
+                    // Clear the board
+                    room.Board = new int[CaroConfig.BOARD_SIZE, CaroConfig.BOARD_SIZE];
+            
+                    // Reset game state
+                    room.CurrentTurn = CaroConfig.PLAYER_O;
+                    room.IsGameStarted = true; 
+                }
+            }
+        }
     }
+    
 }
