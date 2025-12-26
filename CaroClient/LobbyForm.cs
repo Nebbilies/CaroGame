@@ -79,6 +79,7 @@ namespace CaroClient
             foreach (var room in rooms)
             {
                 ListViewItem item = new ListViewItem(room.RoomId);
+                item.SubItems.Add(room.RoomName);
                 item.SubItems.Add($"{room.CurrentPlayerCount}/2");
                 if (room.IsFull || room.IsGameStarted)
                 {
