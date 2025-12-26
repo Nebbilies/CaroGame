@@ -24,6 +24,7 @@ namespace CaroServer
                 RoomInfo newRoom = new RoomInfo
                 {
                     RoomId = roomId,
+                    RoomName = roomName,
                     TimePerMove = timePerMove,
                     PlayerOName = session.PlayerData.Name,
                     CurrentPlayerCount = 1,
@@ -33,7 +34,7 @@ namespace CaroServer
 
                 session.PlayerData.CurrentRoomId = roomId;
                 _rooms.Add(newRoom);
-                session.Send($"ROOM_CREATED|{roomId}");
+                session.Send($"ROOM_CREATED|{roomId}|{roomName}");
                 Console.WriteLine($"Room {roomName} created with ID {roomId} by {session.PlayerData.Name}");
             }
         }
@@ -114,6 +115,7 @@ namespace CaroServer
                 var summaries = _rooms.Select(r => new RoomSummary
                 {
                     RoomId = r.RoomId,
+                    RoomName = r.RoomName,
                     CurrentPlayerCount = r.CurrentPlayerCount,
                     IsGameStarted = r.IsGameStarted
                 }).ToList();
@@ -121,7 +123,21 @@ namespace CaroServer
             }
         }
 
-        public void RemovePlayerFromRoom(ClientSession session, ClientSession opponentSession)
+        public void CancelRoom(ClientSession session) // thang tao phong xong roi thoat
+        {
+            if (string.IsNullOrEmpty(session.PlayerData.CurrentRoomId)) return;
+            lock (_lock)
+            {
+                RoomInfo room = _rooms.FirstOrDefault(r => r.RoomId == session.PlayerData.CurrentRoomId);
+                if (room != null)
+                {
+                    _rooms.Remove(room);
+                    session.PlayerData.CurrentRoomId = null;
+                }
+            }
+        }
+
+        public void RemovePlayerFromRoom(ClientSession session, ClientSession opponentSession) // 2 thang dang dau nhau - 1 thang disconnect
         {
             if (string.IsNullOrEmpty(session.PlayerData.CurrentRoomId)) return;
 
@@ -133,6 +149,7 @@ namespace CaroServer
                     if (opponentSession != null)
                     {
                         opponentSession.Send("GAME_OVER|OPPONENT_LEFT");
+                        opponentSession.PlayerData.CurrentRoomId = null;
                     }
                     _rooms.Remove(room);
                 }
