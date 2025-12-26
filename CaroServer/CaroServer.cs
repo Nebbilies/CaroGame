@@ -138,8 +138,24 @@ namespace CaroServer
                     break;
 
                 case "LEAVE_ROOM":
-                    HandleDisconnect(session);
-                    break;
+                    {
+                        string roomId = session.PlayerData.CurrentRoomId;
+                        if (_roomManager.GetOpponentName(roomId, session.PlayerData.Name) == null)
+                        {
+                            _roomManager.CancelRoom(session);
+                            session.Send("ROOM_CANCELED|");
+                        }
+                        {
+                            ClientSession opponent = FindSessionByName(_roomManager.GetOpponentName(roomId, session.PlayerData.Name));
+                            _roomManager.RemovePlayerFromRoom(session, opponent);
+                            if (opponent != null)
+                            {
+                                opponent.Send("OPPONENT_LEFT|");
+                            }
+                        }
+                        BroadcastLobby();
+                        break;
+                    }
             }
         }
 
