@@ -23,8 +23,6 @@ namespace CaroClient
             Task.Run(() => ListenForServerMsg());
         }
         
-        
-        
         private bool _isListening = true;
 
         private void ListenForServerMsg()
@@ -45,7 +43,7 @@ namespace CaroClient
                     }
                     else if (msg.StartsWith("GAME_START|"))
                     {
-                        _isListening = false; 
+                        _isListening = false;
 
                         string[] parts = msg.Split('|');
                         if (parts.Length >= 5)
@@ -55,14 +53,35 @@ namespace CaroClient
                             string playerXName = parts[3];
                             int.TryParse(parts[4], out int timePerMove);
                             int.TryParse(parts[5], out int playerSymbol);
-                    
-                            this.Invoke(new Action(() => {
+
+                            this.Invoke(new Action(() =>
+                            {
                                 GameForm gameForm = new GameForm(roomId, playerOName, playerXName, playerSymbol, timePerMove);
                                 gameForm.Show();
-                                this.Hide(); 
+                                this.Hide();
                                 MessageBox.Show($"Trận đấu bắt đầu! Bạn là quân {(playerSymbol == 1 ? "O" : "X")}");
                             }));
                         }
+                    }
+                    else if (msg.StartsWith("ROOM_CREATED|"))
+                    {
+                        string[] parts = msg.Split('|');
+                        string roomId = parts[1];
+                        string roomName = parts[2];
+                        this.Invoke(new Action(() =>
+                        {
+                            lvRooms.Items.Clear();
+                            lblCurrentRoomName.Text = $"Phòng hiện tại: {roomName} (ID: {roomId})";
+                            flpRoomInformation.Visible = true;
+                        }));
+                    }
+                    else if (msg.StartsWith("ERROR|"))
+                    {
+                        string errorMsg = msg.Substring("ERROR|".Length);
+                        this.Invoke(new Action(() =>
+                        {
+                            MessageBox.Show(errorMsg, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }));
                     }
                 }
                 catch (Exception ex)
@@ -119,6 +138,12 @@ namespace CaroClient
             string roomId = selectedItem.SubItems[0].Text;
             string joinRoomMsg = $"JOIN_ROOM|{roomId}";
             SocketManager.Instance.Send(joinRoomMsg);
+        }
+
+        private void btnCancelRoom_Click(object sender, EventArgs e)
+        {
+            SocketManager.Instance.Send("LEAVE_ROOM|");
+            flpRoomInformation.Visible = false;
         }
 
         private void LobbyForm_FormClosed(object sender, FormClosedEventArgs e)

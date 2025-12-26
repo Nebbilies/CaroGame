@@ -79,6 +79,9 @@
     <EmbeddedResource Include="CreateRoomForm.resx">
       <DependentUpon>CreateRoomForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GameForm.resx">
+      <DependentUpon>GameForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="LobbyForm.resx">
       <DependentUpon>LobbyForm.cs</DependentUpon>
     </EmbeddedResource>

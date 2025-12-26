@@ -35,6 +35,11 @@
             this.roomInfo = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.btnCreateRoom = new System.Windows.Forms.Button();
             this.btnJoinRoom = new System.Windows.Forms.Button();
+            this.flpRoomInformation = new System.Windows.Forms.FlowLayoutPanel();
+            this.lblCurrentRoomName = new System.Windows.Forms.Label();
+            this.lblWaitingForPlayer = new System.Windows.Forms.Label();
+            this.btnCancelRoom = new System.Windows.Forms.Button();
+            this.flpRoomInformation.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -103,11 +108,60 @@
             this.btnJoinRoom.UseVisualStyleBackColor = true;
             this.btnJoinRoom.Click += new System.EventHandler(this.btnJoinRoom_Click);
             // 
+            // flpRoomInformation
+            // 
+            this.flpRoomInformation.BackColor = System.Drawing.Color.White;
+            this.flpRoomInformation.Controls.Add(this.lblCurrentRoomName);
+            this.flpRoomInformation.Controls.Add(this.lblWaitingForPlayer);
+            this.flpRoomInformation.Controls.Add(this.btnCancelRoom);
+            this.flpRoomInformation.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.flpRoomInformation.Location = new System.Drawing.Point(134, 266);
+            this.flpRoomInformation.Margin = new System.Windows.Forms.Padding(10);
+            this.flpRoomInformation.Name = "flpRoomInformation";
+            this.flpRoomInformation.Size = new System.Drawing.Size(500, 120);
+            this.flpRoomInformation.TabIndex = 4;
+            this.flpRoomInformation.Visible = false;
+            // 
+            // lblCurrentRoomName
+            // 
+            this.lblCurrentRoomName.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.lblCurrentRoomName.Location = new System.Drawing.Point(3, 0);
+            this.lblCurrentRoomName.Name = "lblCurrentRoomName";
+            this.lblCurrentRoomName.Size = new System.Drawing.Size(500, 19);
+            this.lblCurrentRoomName.TabIndex = 0;
+            this.lblCurrentRoomName.Text = "lblCurrentRoomName";
+            this.lblCurrentRoomName.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // lblWaitingForPlayer
+            // 
+            this.lblWaitingForPlayer.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.lblWaitingForPlayer.Location = new System.Drawing.Point(3, 29);
+            this.lblWaitingForPlayer.Margin = new System.Windows.Forms.Padding(3, 10, 3, 0);
+            this.lblWaitingForPlayer.Name = "lblWaitingForPlayer";
+            this.lblWaitingForPlayer.Size = new System.Drawing.Size(500, 19);
+            this.lblWaitingForPlayer.TabIndex = 1;
+            this.lblWaitingForPlayer.Text = "Đang đợi người chơi khác... (1/2)";
+            this.lblWaitingForPlayer.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // btnCancelRoom
+            // 
+            this.btnCancelRoom.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.btnCancelRoom.AutoSize = true;
+            this.btnCancelRoom.Location = new System.Drawing.Point(215, 58);
+            this.btnCancelRoom.Margin = new System.Windows.Forms.Padding(3, 10, 3, 3);
+            this.btnCancelRoom.Name = "btnCancelRoom";
+            this.btnCancelRoom.Size = new System.Drawing.Size(75, 29);
+            this.btnCancelRoom.TabIndex = 2;
+            this.btnCancelRoom.Text = "Thoát";
+            this.btnCancelRoom.UseVisualStyleBackColor = true;
+            this.btnCancelRoom.Click += new System.EventHandler(this.btnCancelRoom_Click);
+            // 
             // LobbyForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 23F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(782, 696);
+            this.Controls.Add(this.flpRoomInformation);
             this.Controls.Add(this.btnJoinRoom);
             this.Controls.Add(this.btnCreateRoom);
             this.Controls.Add(this.lvRooms);
@@ -120,6 +174,8 @@
             this.Padding = new System.Windows.Forms.Padding(30);
             this.Text = "LobbyForm";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.LobbyForm_FormClosed);
+            this.flpRoomInformation.ResumeLayout(false);
+            this.flpRoomInformation.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -134,5 +190,9 @@
         private System.Windows.Forms.ColumnHeader roomName;
         private System.Windows.Forms.ColumnHeader roomInfo;
         private System.Windows.Forms.ColumnHeader roomId;
+        private System.Windows.Forms.FlowLayoutPanel flpRoomInformation;
+        private System.Windows.Forms.Label lblCurrentRoomName;
+        private System.Windows.Forms.Label lblWaitingForPlayer;
+        private System.Windows.Forms.Button btnCancelRoom;
     }
 }
