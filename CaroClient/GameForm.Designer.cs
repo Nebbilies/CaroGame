@@ -45,12 +45,13 @@
             // mainLayout
             // 
             this.mainLayout.ColumnCount = 2;
-            this.mainLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 500F)); // Adjusted for typical board size
+            this.mainLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 500F));
             this.mainLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.mainLayout.Controls.Add(this.pbxGameGrid, 0, 0);
             this.mainLayout.Controls.Add(this.panelRightInfo, 1, 0);
             this.mainLayout.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainLayout.Location = new System.Drawing.Point(0, 0);
+            this.mainLayout.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.mainLayout.Name = "mainLayout";
             this.mainLayout.RowCount = 1;
             this.mainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -61,9 +62,11 @@
             // 
             this.pbxGameGrid.BackColor = System.Drawing.Color.White;
             this.pbxGameGrid.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pbxGameGrid.Location = new System.Drawing.Point(3, 3);
+            this.pbxGameGrid.Location = new System.Drawing.Point(2, 3);
+            this.pbxGameGrid.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.pbxGameGrid.Name = "pbxGameGrid";
-            this.pbxGameGrid.Size = new System.Drawing.Size(494, 744);
+            this.pbxGameGrid.Size = new System.Drawing.Size(496, 744);
+            this.pbxGameGrid.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pbxGameGrid.TabIndex = 0;
             this.pbxGameGrid.TabStop = false;
             this.pbxGameGrid.Paint += new System.Windows.Forms.PaintEventHandler(this.pbxGameGrid_Paint);
@@ -76,10 +79,11 @@
             this.panelRightInfo.Controls.Add(this.lblTimer);
             this.panelRightInfo.Controls.Add(this.lblScore);
             this.panelRightInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelRightInfo.Location = new System.Drawing.Point(503, 3);
+            this.panelRightInfo.Location = new System.Drawing.Point(502, 3);
+            this.panelRightInfo.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.panelRightInfo.Name = "panelRightInfo";
-            this.panelRightInfo.Padding = new System.Windows.Forms.Padding(20);
-            this.panelRightInfo.Size = new System.Drawing.Size(394, 744);
+            this.panelRightInfo.Padding = new System.Windows.Forms.Padding(20, 20, 20, 20);
+            this.panelRightInfo.Size = new System.Drawing.Size(396, 744);
             this.panelRightInfo.TabIndex = 1;
             // 
             // lblPlayer1
@@ -89,11 +93,11 @@
             this.lblPlayer1.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold);
             this.lblPlayer1.ForeColor = System.Drawing.Color.Black;
             this.lblPlayer1.Location = new System.Drawing.Point(20, 20);
+            this.lblPlayer1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblPlayer1.Name = "lblPlayer1";
-            this.lblPlayer1.Size = new System.Drawing.Size(130, 25);
+            this.lblPlayer1.Size = new System.Drawing.Size(116, 25);
             this.lblPlayer1.TabIndex = 0;
             this.lblPlayer1.Text = "Player 1 (O)";
-            this.lblPlayer1.TextAlign = System.Drawing.ContentAlignment.TopLeft;
             // 
             // lblPlayer2
             // 
@@ -101,10 +105,11 @@
             this.lblPlayer2.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.lblPlayer2.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold);
             this.lblPlayer2.ForeColor = System.Drawing.Color.Black;
-            this.lblPlayer2.Location = new System.Drawing.Point(20, 699);
+            this.lblPlayer2.Location = new System.Drawing.Point(20, 689);
+            this.lblPlayer2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblPlayer2.Name = "lblPlayer2";
             this.lblPlayer2.Padding = new System.Windows.Forms.Padding(0, 0, 0, 10);
-            this.lblPlayer2.Size = new System.Drawing.Size(127, 35);
+            this.lblPlayer2.Size = new System.Drawing.Size(114, 35);
             this.lblPlayer2.TabIndex = 1;
             this.lblPlayer2.Text = "Player 2 (X)";
             this.lblPlayer2.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
@@ -115,8 +120,9 @@
             this.lblTimer.Font = new System.Drawing.Font("Segoe UI", 26F, System.Drawing.FontStyle.Bold);
             this.lblTimer.ForeColor = System.Drawing.Color.Black;
             this.lblTimer.Location = new System.Drawing.Point(20, 100);
+            this.lblTimer.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblTimer.Name = "lblTimer";
-            this.lblTimer.Size = new System.Drawing.Size(110, 47);
+            this.lblTimer.Size = new System.Drawing.Size(109, 47);
             this.lblTimer.TabIndex = 2;
             this.lblTimer.Text = "00:00";
             // 
@@ -126,8 +132,9 @@
             this.lblScore.Font = new System.Drawing.Font("Segoe UI", 22F, System.Drawing.FontStyle.Bold);
             this.lblScore.ForeColor = System.Drawing.Color.Gray;
             this.lblScore.Location = new System.Drawing.Point(30, 200);
+            this.lblScore.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblScore.Name = "lblScore";
-            this.lblScore.Size = new System.Drawing.Size(48, 41);
+            this.lblScore.Size = new System.Drawing.Size(47, 41);
             this.lblScore.TabIndex = 3;
             this.lblScore.Text = "vs";
             // 
@@ -143,9 +150,13 @@
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(900, 750);
             this.Controls.Add(this.mainLayout);
+            this.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.MaximizeBox = false;
             this.Name = "GameForm";
             this.Text = "Caro Online";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.GameForm_FormClosed);
             this.mainLayout.ResumeLayout(false);
+            this.mainLayout.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbxGameGrid)).EndInit();
             this.panelRightInfo.ResumeLayout(false);
             this.panelRightInfo.PerformLayout();

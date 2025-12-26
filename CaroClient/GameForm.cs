@@ -315,5 +315,16 @@ namespace CaroClient
                 }
             }
         }
+
+        private void GameForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (SocketManager.Instance.Client.Connected)
+            {
+                SocketManager.Instance.Send("LOGOUT|");
+                SocketManager.Instance.Client.Close();
+            }
+
+            Application.Exit();
+        }
     }
 }
