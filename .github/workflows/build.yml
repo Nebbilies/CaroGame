@@ -1,0 +1,42 @@
+name: Build Caro Game (Client & Server)
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v6
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v45
+      with:
+        dotnet-version: 8.0.x
+
+    - name: Restore Dependencies
+      run: dotnet restore
+      
+    - name: Publish Server
+      run: |
+        dotnet publish CaroServer/CaroServer.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o ./dist/Server
+
+    - name: Publish Client
+      run: |
+        dotnet publish CaroClient/CaroClient.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o ./dist/Client
+
+    - name: Upload Server Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: Caro-Server-App
+        path: ./dist/Server
+        
+    - name: Upload Client Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: Caro-Client-App
+        path: ./dist/Client
