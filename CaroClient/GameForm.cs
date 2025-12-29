@@ -346,6 +346,10 @@ namespace CaroClient
                 e.Graphics.FillRectangle(brush, this.ClientRectangle);
             }
         }
-        
+
+        private void panelRightInfo_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }

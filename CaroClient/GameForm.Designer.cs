@@ -45,8 +45,9 @@
             // 
             // mainLayout
             // 
+            this.mainLayout.AutoSize = true;
             this.mainLayout.ColumnCount = 2;
-            this.mainLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 667F));
+            this.mainLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.mainLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.mainLayout.Controls.Add(this.pbxGameGrid, 0, 0);
             this.mainLayout.Controls.Add(this.panelRightInfo, 1, 0);
@@ -56,7 +57,7 @@
             this.mainLayout.Name = "mainLayout";
             this.mainLayout.RowCount = 1;
             this.mainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.mainLayout.Size = new System.Drawing.Size(1200, 923);
+            this.mainLayout.Size = new System.Drawing.Size(1269, 678);
             this.mainLayout.TabIndex = 0;
             // 
             // pbxGameGrid
@@ -66,7 +67,7 @@
             this.pbxGameGrid.Location = new System.Drawing.Point(3, 4);
             this.pbxGameGrid.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.pbxGameGrid.Name = "pbxGameGrid";
-            this.pbxGameGrid.Size = new System.Drawing.Size(661, 915);
+            this.pbxGameGrid.Size = new System.Drawing.Size(800, 670);
             this.pbxGameGrid.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pbxGameGrid.TabIndex = 0;
             this.pbxGameGrid.TabStop = false;
@@ -80,13 +81,13 @@
             this.panelRightInfo.Controls.Add(this.lblPlayer2);
             this.panelRightInfo.Controls.Add(this.lblTimer);
             this.panelRightInfo.Controls.Add(this.lblScore);
-            this.panelRightInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelRightInfo.Location = new System.Drawing.Point(670, 4);
+            this.panelRightInfo.Location = new System.Drawing.Point(809, 4);
             this.panelRightInfo.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panelRightInfo.Name = "panelRightInfo";
             this.panelRightInfo.Padding = new System.Windows.Forms.Padding(27, 25, 27, 25);
-            this.panelRightInfo.Size = new System.Drawing.Size(527, 915);
+            this.panelRightInfo.Size = new System.Drawing.Size(292, 258);
             this.panelRightInfo.TabIndex = 1;
+            this.panelRightInfo.Paint += new System.Windows.Forms.PaintEventHandler(this.panelRightInfo_Paint);
             // 
             // lblPlayer1
             // 
@@ -141,8 +142,9 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSize = true;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(1200, 923);
+            this.ClientSize = new System.Drawing.Size(1269, 678);
             this.Controls.Add(this.mainLayout);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -157,6 +159,7 @@
             this.panelRightInfo.ResumeLayout(false);
             this.panelRightInfo.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
