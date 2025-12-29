@@ -19,7 +19,10 @@ jobs:
         dotnet-version: 8.0.x
 
     - name: Restore Dependencies
-      run: dotnet restore
+      run: |
+        dotnet restore CaroLibrary/CaroLibrary.csproj
+        dotnet restore CaroServer/CaroServer.csproj
+        dotnet restore CaroClient/CaroClient.csproj
       
     - name: Publish Server
       run: |
