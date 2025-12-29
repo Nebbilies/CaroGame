@@ -33,7 +33,7 @@ jobs:
 
  
     - name: Publish Client
-      run: dotnet publish CaroClient/CaroClient.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o ./dist/Client
+      run: msbuild CaroClient/CaroClient.csproj /p:Configuration=Release /p:OutputPath=../dist/Client
 
     - name: Upload Server Artifact
       uses: actions/upload-artifact@v4
