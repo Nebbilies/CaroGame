@@ -60,7 +60,22 @@ namespace CaroClient
         {
             try
             {
-                SocketManager.Instance.Connect("127.0.0.1", 8888);
+                string serverIp = txtBoxIP.Text.Trim();
+                if (string.IsNullOrEmpty(serverIp))
+                {
+                    MessageBox.Show("Vui lòng nhập IP server", "Lỗi",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                int port = 8888;
+                bool connected = SocketManager.Instance.Connect(serverIp, port);
+                if (!connected)
+                {
+                    MessageBox.Show("Không thể kết nối tới máy chủ", "Lỗi",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
                 Task.Run(() => ListenForServerMsg());
                 SocketManager.Instance.Send("LOGIN|" + txtBoxName.Text);
             }
