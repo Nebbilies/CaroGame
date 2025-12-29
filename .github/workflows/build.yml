@@ -1,4 +1,4 @@
-name: build
+name: Build Caro Game (Hybrid .NET)
 
 on:
   push:
@@ -13,24 +13,27 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v6
 
-    - name: Setup .NET
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v2
+
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v2
+
+    - name: Setup .NET 8
       uses: actions/setup-dotnet@v5
       with:
         dotnet-version: 8.0.x
 
-    - name: Restore Dependencies
-      run: |
-        dotnet restore CaroLibrary/CaroLibrary.csproj
-        dotnet restore CaroServer/CaroServer.csproj
-        dotnet restore CaroClient/CaroClient.csproj
-      
-    - name: Publish Server
-      run: |
-        dotnet publish CaroServer/CaroServer.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o ./dist/Server
+   
+    - name: Restore NuGet Packages
+      run: nuget restore CaroGame.sln
 
+    - name: Build Server
+      run: msbuild CaroServer/CaroServer.csproj /p:Configuration=Release /p:OutputPath=../dist/Server
+
+ 
     - name: Publish Client
-      run: |
-        dotnet publish CaroClient/CaroClient.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o ./dist/Client
+      run: dotnet publish CaroClient/CaroClient.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o ./dist/Client
 
     - name: Upload Server Artifact
       uses: actions/upload-artifact@v4
