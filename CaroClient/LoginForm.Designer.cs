@@ -33,9 +33,9 @@
             this.lblUsername = new System.Windows.Forms.Label();
             this.btnConnect = new System.Windows.Forms.Button();
             this.flpControls = new System.Windows.Forms.FlowLayoutPanel();
-            this.pbLogo = new System.Windows.Forms.PictureBox();
             this.lblIP = new System.Windows.Forms.Label();
             this.txtBoxIP = new System.Windows.Forms.TextBox();
+            this.pbLogo = new System.Windows.Forms.PictureBox();
             this.flpControls.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbLogo)).BeginInit();
             this.SuspendLayout();
@@ -89,18 +89,6 @@
             this.flpControls.Size = new System.Drawing.Size(548, 164);
             this.flpControls.TabIndex = 4;
             // 
-            // pbLogo
-            // 
-            this.pbLogo.BackColor = System.Drawing.Color.Transparent;
-            this.pbLogo.Image = ((System.Drawing.Image)(resources.GetObject("pbLogo.Image")));
-            this.pbLogo.Location = new System.Drawing.Point(154, 17);
-            this.pbLogo.Name = "pbLogo";
-            this.pbLogo.Size = new System.Drawing.Size(263, 99);
-            this.pbLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.pbLogo.TabIndex = 5;
-            this.pbLogo.TabStop = false;
-            this.pbLogo.WaitOnLoad = true;
-            // 
             // lblIP
             // 
             this.lblIP.AutoSize = true;
@@ -122,6 +110,18 @@
             this.txtBoxIP.TabIndex = 5;
             this.txtBoxIP.Text = "127.0.0.1";
             // 
+            // pbLogo
+            // 
+            this.pbLogo.BackColor = System.Drawing.Color.Transparent;
+            this.pbLogo.Image = ((System.Drawing.Image)(resources.GetObject("pbLogo.Image")));
+            this.pbLogo.Location = new System.Drawing.Point(154, 17);
+            this.pbLogo.Name = "pbLogo";
+            this.pbLogo.Size = new System.Drawing.Size(263, 99);
+            this.pbLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.pbLogo.TabIndex = 5;
+            this.pbLogo.TabStop = false;
+            this.pbLogo.WaitOnLoad = true;
+            // 
             // LoginForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
@@ -134,6 +134,7 @@
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("Segoe UI", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "LoginForm";
             this.Padding = new System.Windows.Forms.Padding(20);
@@ -144,6 +145,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pbLogo)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
 
         private System.Windows.Forms.TextBox txtBoxIP;

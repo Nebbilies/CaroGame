@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GameForm));
             this.mainLayout = new System.Windows.Forms.TableLayoutPanel();
             this.pbxGameGrid = new System.Windows.Forms.PictureBox();
             this.panelRightInfo = new System.Windows.Forms.Panel();
@@ -143,10 +144,11 @@
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1200, 923);
             this.Controls.Add(this.mainLayout);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MaximizeBox = false;
             this.Name = "GameForm";
-            this.Text = "Caro Online";
+            this.Text = "Caro Game";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.GameForm_FormClosed);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.GameForm_Paint);
             this.mainLayout.ResumeLayout(false);
@@ -155,6 +157,7 @@
             this.panelRightInfo.ResumeLayout(false);
             this.panelRightInfo.PerformLayout();
             this.ResumeLayout(false);
+
         }
 
         #endregion

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CreateRoomForm));
             this.lblRoomName = new System.Windows.Forms.Label();
             this.txtRoomName = new System.Windows.Forms.TextBox();
             this.lblRoomTimer = new System.Windows.Forms.Label();
@@ -121,6 +122,7 @@
             this.Controls.Add(this.lblRoomName);
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MaximizeBox = false;
             this.Name = "CreateRoomForm";

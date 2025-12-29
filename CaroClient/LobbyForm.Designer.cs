@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LobbyForm));
             this.label1 = new System.Windows.Forms.Label();
             this.lvRooms = new System.Windows.Forms.ListView();
             this.roomId = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -151,7 +152,7 @@
             this.btnCancelRoom.Location = new System.Drawing.Point(215, 58);
             this.btnCancelRoom.Margin = new System.Windows.Forms.Padding(3, 10, 3, 3);
             this.btnCancelRoom.Name = "btnCancelRoom";
-            this.btnCancelRoom.Size = new System.Drawing.Size(75, 29);
+            this.btnCancelRoom.Size = new System.Drawing.Size(75, 33);
             this.btnCancelRoom.TabIndex = 2;
             this.btnCancelRoom.Text = "Thoát";
             this.btnCancelRoom.UseVisualStyleBackColor = true;
@@ -159,7 +160,7 @@
             // 
             // LobbyForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 19F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 23F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(782, 696);
             this.Controls.Add(this.flpRoomInformation);
@@ -169,11 +170,12 @@
             this.Controls.Add(this.label1);
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MaximizeBox = false;
             this.Name = "LobbyForm";
             this.Padding = new System.Windows.Forms.Padding(30);
-            this.Text = "LobbyForm";
+            this.Text = "Caro Game - Lobby";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.LobbyForm_FormClosed);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.LobbyForm_Paint);
             this.flpRoomInformation.ResumeLayout(false);
