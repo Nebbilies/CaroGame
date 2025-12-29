@@ -12,7 +12,7 @@ namespace CaroServer
         private TcpListener _listener;
         private List<ClientSession> _sessions = new List<ClientSession>();
         private RoomManager _roomManager = new RoomManager();
-
+        
         public CaroServer(string ip, int port)
         {
             _listener = new TcpListener(IPAddress.Parse(ip), port);
@@ -111,29 +111,26 @@ namespace CaroServer
                     }
                     break;
                 
+                
                 case "REMATCH_REQUEST":
                 {
-                    string roomId = session.PlayerData.CurrentRoomId;
+                    if (parts.Length < 2) return;
+                    string roomId = parts[1];
                     string opponentName = _roomManager.GetOpponentName(roomId, session.PlayerData.Name);
                     ClientSession opponent = FindSessionByName(opponentName);
         
-                    if (opponent != null)
-                    {
-                        opponent.Send("REMATCH_REQUEST|");
-                    }
+                    _roomManager.HandleRematchRequest(session, roomId, opponent);
                 }
                     break;
                 
                 case "REMATCH_ACCEPT":
                 {
-                    string roomId = session.PlayerData.CurrentRoomId;
-                    
-                    _roomManager.ResetRoom(roomId);
-                    
-                    ClientSession opponent = FindSessionByName(_roomManager.GetOpponentName(roomId, session.PlayerData.Name));
+                    if (parts.Length < 2) return;
+                    string roomId = parts[1];
+                    string opponentName = _roomManager.GetOpponentName(roomId, session.PlayerData.Name);
+                    ClientSession opponent = FindSessionByName(opponentName);
         
-                    session.Send("GAME_RESET|");
-                    if (opponent != null) opponent.Send("GAME_RESET|");
+                    _roomManager.HandleRematchAccept(session, roomId, opponent);
                 }
                     break;
 
@@ -145,6 +142,7 @@ namespace CaroServer
                             _roomManager.CancelRoom(session);
                             session.Send("ROOM_CANCELED|");
                         }
+                        else
                         {
                             ClientSession opponent = FindSessionByName(_roomManager.GetOpponentName(roomId, session.PlayerData.Name));
                             _roomManager.RemovePlayerFromRoom(session, opponent);

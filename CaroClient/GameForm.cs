@@ -14,24 +14,19 @@ namespace CaroClient
 {
     public partial class GameForm : Form
     {
-        // Network & Game State
         private string _roomId;
-        private int _mySymbol; // 1 = O (Player 1), 2 = X (Player 2)
+        private int _mySymbol; 
         private int _currentTurn;
         private int[,] _board;
         private bool _isGameActive;
-
-        // UI & Timer
+        
         private int _timePerMove;
         private int _timeLeftSeconds;
-        // Graphics constants
         private const int CellSize = 20;
         private const int GridMargin = 20;
         private int GridPixelSize => CaroConfig.BOARD_SIZE * CellSize;
         
-
-        // In GameForm.cs
-
+        
         public GameForm(string roomId, string playerOName, string playerXName, int mySymbol, int timePerMove)
         {
             InitializeComponent();
@@ -46,8 +41,8 @@ namespace CaroClient
             lblPlayer1.Text = playerOName + " (O)";
             lblPlayer2.Text = playerXName + " (X)";
     
-            if (_mySymbol == CaroConfig.PLAYER_O) lblPlayer1.ForeColor = Color.Green;
-            else lblPlayer2.ForeColor = Color.Green;
+            if (_mySymbol == CaroConfig.PLAYER_O) lblPlayer1.ForeColor = Color.Red;
+            else lblPlayer2.ForeColor = Color.Blue;
 
             UpdateTurnUI();
             ResetTurnTimer();
@@ -62,13 +57,15 @@ namespace CaroClient
         {
             try
             {
-                // Change this line to use the shared Reader
                 StreamReader reader = SocketManager.Instance.Reader;
 
-                while (_isGameActive && SocketManager.Instance.Client.Connected)
+                while (SocketManager.Instance.Client.Connected)
                 {
                     string msg = reader.ReadLine();
                     if (msg == null) break;
+                    
+                    Console.WriteLine($"Client Received: {msg}");
+                    ;
 
                     this.Invoke(new Action(() => ProcessServerMessage(msg)));
                 }
@@ -80,8 +77,6 @@ namespace CaroClient
                 CloseGame();
             }
         }
-
-        // In GameForm.cs
 
         private void ProcessServerMessage(string msg)
         {
@@ -110,10 +105,8 @@ namespace CaroClient
                 case "GAME_OVER":
                     HandleGameOver(parts);
                     break;
-
-                // --- NEW CASES BELOW ---
+                
                 case "REMATCH_REQUEST":
-                    // The opponent wants to play again. Ask this player.
                     DialogResult result = MessageBox.Show(
                         "Đối thủ muốn chơi ván mới. Bạn có đồng ý không?", 
                         "Yêu cầu tái đấu", 
@@ -122,16 +115,21 @@ namespace CaroClient
 
                     if (result == DialogResult.Yes)
                     {
-                        SocketManager.Instance.Send("REMATCH_ACCEPT|");
+                        SocketManager.Instance.Send($"REMATCH_ACCEPT|{_roomId}");
+
                     }
                     else
                     {
                         LeaveRoom();
                     }
                     break;
+                
+                case "OPPONENT_LEFT":
+                    MessageBox.Show("Đối thủ đã thoát hoặc từ chối tái đấu.", "Kết thúc");
+                    CloseGame();
+                    break;
 
                 case "GAME_RESET":
-                    // Server confirmed the rematch. Clear the board.
                     ResetGame();
                     break;
             }
@@ -142,53 +140,74 @@ namespace CaroClient
             _isGameActive = false;
             turnTimer.Stop();
             string subType = parts[1];
+            bool iAmWinner = false;
             string message = "";
 
             if (subType == "WIN")
             {
                 int winnerId = int.Parse(parts[2]);
+                iAmWinner = (winnerId == _mySymbol);
                 string winnerName = (winnerId == CaroConfig.PLAYER_O) ? lblPlayer1.Text : lblPlayer2.Text;
-                if (winnerId == _mySymbol) message = "Chúc mừng! Bạn đã chiến thắng!";
-                else message = $"{winnerName} đã thắng!";
+                if (iAmWinner) message = "Chúc mừng! Bạn đã chiến thắng!";
+                else message = $"{winnerName} đã thắng!";;
             }
             else if (subType == "DRAW")
             {
                 message = "Ván cờ Hòa!";
+                iAmWinner = (_mySymbol == CaroConfig.PLAYER_O);
             }
             else if (subType == "OPPONENT_LEFT")
             {
                 MessageBox.Show("Đối thủ đã thoát. Bạn thắng!", "Kết thúc");
-                CloseGame(); // Opponent is gone, so we must leave too
+                CloseGame(); 
                 return;
             }
 
-            // Ask for Rematch
-            DialogResult result = MessageBox.Show(
-                message + "\n\nBạn có muốn chơi lại không?", 
-                "Kết thúc game", 
-                MessageBoxButtons.YesNo, 
-                MessageBoxIcon.Question);
-
-            if (result == DialogResult.Yes)
+            if (iAmWinner)
             {
-                SocketManager.Instance.Send("REMATCH_REQUEST|");
-                this.Text = "Đang chờ đối thủ..."; // Update title to show status
+                DialogResult result = MessageBox.Show(
+                    message + "\n\nBạn có muốn tái đấu không?",
+                    "Kết thúc game",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question);
+                if (result == DialogResult.Yes)
+                {
+                    SocketManager.Instance.Send($"REMATCH_REQUEST|{_roomId}");
+                    
+                    result = MessageBox.Show("Đang chờ đối thủ...", "Đang chờ đối thủ...", MessageBoxButtons.OKCancel);
+
+                    if (result == DialogResult.Cancel)
+                    {
+                        LeaveRoom();
+                    }
+                }
+                if (result == DialogResult.Cancel)
+                {
+                    LeaveRoom();
+                }
             }
+
             else
             {
-                LeaveRoom();
+                DialogResult result = MessageBox.Show(
+                    message + "\n\nĐang chờ đối thủ...",
+                    "Kết thúc game",
+                    MessageBoxButtons.OKCancel);
+                if (result == DialogResult.Cancel)
+                {
+                    LeaveRoom();
+                }
             }
         }
 
         private void ResetGame()
         {
-            // 1. Clear Data
+
             _board = new int[CaroConfig.BOARD_SIZE, CaroConfig.BOARD_SIZE];
-            _currentTurn = CaroConfig.PLAYER_O; // Reset turn to O
+            _currentTurn = CaroConfig.PLAYER_O; 
             _isGameActive = true;
 
-            // 2. Reset UI
-            pbxGameGrid.Invalidate(); // Redraw empty board
+            pbxGameGrid.Invalidate();
             ResetTurnTimer();
             UpdateTurnUI();
             
@@ -197,7 +216,6 @@ namespace CaroClient
 
         private void LeaveRoom()
         {
-            // Send leave command so server removes us from the room
             SocketManager.Instance.Send("LEAVE_ROOM|");
             CloseGame();
         }
@@ -207,14 +225,9 @@ namespace CaroClient
             _isGameActive = false;
             turnTimer.Stop();
             
-            // Create new Lobby logic or just close this form to reveal the hidden Lobby
-            // Since LobbyForm was hidden (this.Hide()), closing this form usually ends the app 
-            // unless you handle the flow. 
-            // Best practice: Show the LobbyForm again.
-            
             this.Hide();
             LobbyForm lobby = new LobbyForm(); 
-            lobby.ShowDialog(); // Use ShowDialog to block execution until lobby closes
+            lobby.ShowDialog(); 
             this.Close();
         }
         private void pbxGameGrid_MouseClick(object sender, MouseEventArgs e)
@@ -225,8 +238,7 @@ namespace CaroClient
             {
                 return; 
             }
-
-            // 2. Calculate Grid Coordinates
+            
             int relativeX = e.X - GridMargin;
             int relativeY = e.Y - GridMargin;
             if (relativeX < 0 || relativeY < 0 || relativeX >= GridPixelSize || relativeY >= GridPixelSize)
@@ -237,9 +249,7 @@ namespace CaroClient
             
             if (_board[gridX, gridY] != CaroConfig.EMPTY)
                 return;
-
-            // 4. Send Move to Server
-            // Protocol: MOVE|RoomID|X|Y
+            
             SocketManager.Instance.Send($"MOVE|{_roomId}|{gridX}|{gridY}");
         }
         
@@ -258,13 +268,10 @@ namespace CaroClient
                 _timeLeftSeconds--;
                 lblTimer.Text = _timeLeftSeconds.ToString("00");
             }
-            // Note: We don't auto-switch turn locally on 0. We wait for server logic 
-            // (or if server doesn't implement timeout, this is just visual).
         }
 
         private void UpdateTurnUI()
         {
-            // Bold the active player
             lblPlayer1.Font = new Font(lblPlayer1.Font, (_currentTurn == CaroConfig.PLAYER_O) ? FontStyle.Bold : FontStyle.Regular);
             lblPlayer2.Font = new Font(lblPlayer2.Font, (_currentTurn == CaroConfig.PLAYER_X) ? FontStyle.Bold : FontStyle.Regular);
             
@@ -285,15 +292,13 @@ namespace CaroClient
             Pen xPen = new Pen(Color.Red, 2);
             Pen oPen = new Pen(Color.Blue, 2);
             int padding = 4;
-
-            // Draw Grid Lines
+            
             for (int i = 0; i <= CaroConfig.BOARD_SIZE; i++)
             {
                 g.DrawLine(gridPen, i * CellSize, 0, i * CellSize, GridPixelSize);
                 g.DrawLine(gridPen, 0, i * CellSize, GridPixelSize, i * CellSize);
             }
-
-            // Draw Pieces from _board array
+            
             for (int i = 0; i < CaroConfig.BOARD_SIZE; i++)
             {
                 for (int j = 0; j < CaroConfig.BOARD_SIZE; j++)
@@ -341,5 +346,6 @@ namespace CaroClient
                 e.Graphics.FillRectangle(brush, this.ClientRectangle);
             }
         }
+        
     }
 }

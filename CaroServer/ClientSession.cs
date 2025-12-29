@@ -1,4 +1,5 @@
-﻿using CaroLibrary.CaroLibrary;
+﻿using System;
+using CaroLibrary.CaroLibrary;
 using System.IO;
 using System.Net.Sockets;
 
@@ -9,6 +10,8 @@ namespace CaroServer
         public Player PlayerData { get; private set; }
         private StreamReader _reader;
         private StreamWriter _writer;
+        private readonly object _sendLock = new object();
+
 
         public ClientSession(TcpClient client)
         {
@@ -26,13 +29,31 @@ namespace CaroServer
         {
             try
             {
-                if (PlayerData.Client.Connected)
+                lock (_sendLock)
                 {
+                    if (PlayerData.Client == null || !PlayerData.Client.Connected)
+                        return;
+
                     _writer.WriteLine(message);
+                    _writer.Flush();
                 }
+
+                Console.WriteLine($"[Server -> {PlayerData.Name}] {message}");
             }
-            catch { }
+            catch (IOException ex)
+            {
+                Console.WriteLine($"IO error sending to {PlayerData.Name}: {ex.Message}");
+            }
+            catch (ObjectDisposedException)
+            {
+                Console.WriteLine($"Stream disposed for {PlayerData.Name}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Unexpected send error to {PlayerData.Name}: {ex}");
+            }
         }
+
 
         public string Receive()
         {

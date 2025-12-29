@@ -96,14 +96,18 @@ namespace CaroServer
                     string winMsg = $"GAME_OVER|WIN|{playerId}";
                     session.Send(winMsg);
                     opponentSession?.Send(winMsg);
-                    _rooms.Remove(room);
+                    // _rooms.Remove(room);
+
+                    room.IsGameStarted = false;
                 }
                 else if (isDraw)
                 {
                     string drawMsg = "GAME_OVER|DRAW";
                     session.Send(drawMsg);
                     opponentSession?.Send(drawMsg);
-                    _rooms.Remove(room);
+                    // _rooms.Remove(room);
+                    
+                    room.IsGameStarted = false;
                 }
             }
         }
@@ -163,6 +167,59 @@ namespace CaroServer
                 RoomInfo room = _rooms.FirstOrDefault(r => r.RoomId == roomId);
                 if (room == null) return null;
                 return (room.PlayerOName == myName) ? room.PlayerXName : room.PlayerOName;
+            }
+        }
+        
+        public void HandleRematchRequest(ClientSession session, string roomId, ClientSession opponentSession)
+        {
+            lock (_lock)
+            {
+                RoomInfo room = _rooms.FirstOrDefault(r => r.RoomId == roomId);
+                if (room == null)
+                {
+                    Console.WriteLine($"HandleRematchRequest: room {roomId} not found");
+                    session.Send("OPPONENT_LEFT|");
+                    return;
+                }
+
+                if (opponentSession != null)
+                {
+                    try
+                    {
+                        // send rematch request WITH roomId so opponent can verify
+                        opponentSession.Send($"REMATCH_REQUEST|{roomId}");
+                        Console.WriteLine($"Rematch request forwarded from {session.PlayerData.Name} to {opponentSession.PlayerData?.Name ?? "unknown"} for room {roomId}");
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"ERROR sending REMATCH_REQUEST to opponent: {ex}");
+                        session.Send("OPPONENT_LEFT|");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"HandleRematchRequest: opponentSession is null for room {roomId}");
+                    session.Send("OPPONENT_LEFT|");
+                }
+            }
+        }
+
+
+        public void HandleRematchAccept(ClientSession session, string roomId, ClientSession opponentSession)
+        {
+            lock (_lock)
+            {
+                RoomInfo room = _rooms.FirstOrDefault(r => r.RoomId == roomId);
+                if (room == null) return;
+                
+                ResetRoom(roomId);
+                
+                session.Send("GAME_RESET|");
+                if (opponentSession != null)
+                {
+                    opponentSession.Send("GAME_RESET|");
+                }
+                Console.WriteLine($"Rematch accepted by {session.PlayerData.Name}");
             }
         }
         public void ResetRoom(string roomId)
